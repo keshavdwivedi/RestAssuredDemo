@@ -1,5 +1,6 @@
 package GetRequestDemo;
 
+import ApiUtils.ApiUtility;
 import io.restassured.RestAssured;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
@@ -12,6 +13,8 @@ public class GetRequest_TC003 {
     @Test
     public void getRequest_verifyindividualHeaders(){
 
+        String encodedApiKey="ZmFiNWVlYjc5ZmVmNDRmMzg0NjUzMDU1MjEwNTA2";
+
         //request URI
         RestAssured.baseURI="http://api.weatherapi.com/v1";
 
@@ -19,7 +22,7 @@ public class GetRequest_TC003 {
         RequestSpecification httpRequest=RestAssured.given();
 
         //response object
-        Response response =httpRequest.request(Method.GET,"/astronomy.json?key=fab5eeb79fef44f384653055210506&q=Lucknow&dt=2021-06-05");
+        Response response =httpRequest.request(Method.GET,"/astronomy.json?key="+ ApiUtility.decodeString(encodedApiKey) +"&q=Lucknow&dt=2021-06-05");
 
         //print response body
         System.out.println(response.getBody().asString());

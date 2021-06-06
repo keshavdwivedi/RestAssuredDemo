@@ -1,5 +1,6 @@
 package GetRequestDemo;
 
+import ApiUtils.ApiUtility;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -14,6 +15,8 @@ public class GetRequest_TC004 {
     @Test
     public void getRequest_verifyAllHeaders(){
 
+        String encodedApiKey="ZmFiNWVlYjc5ZmVmNDRmMzg0NjUzMDU1MjEwNTA2";
+
         //request URI
         RestAssured.baseURI="http://api.weatherapi.com/v1";
 
@@ -21,7 +24,7 @@ public class GetRequest_TC004 {
         RequestSpecification httpRequest=RestAssured.given();
 
         //response object
-        Response response =httpRequest.request(Method.GET,"/timezone.json?key=fab5eeb79fef44f384653055210506&q=Lucknow");
+        Response response =httpRequest.request(Method.GET,"/timezone.json?key="+ ApiUtility.decodeString(encodedApiKey) +"&q=Lucknow");
 
         //print response body
         System.out.println(response.getBody().asString());

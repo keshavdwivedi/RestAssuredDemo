@@ -1,5 +1,6 @@
 package GetRequestDemo;
 
+import ApiUtils.ApiUtility;
 import io.restassured.RestAssured;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
@@ -12,6 +13,8 @@ public class GetRequest_TC005 {
     @Test
     public void getrequest_verifyjsonResponse_singleField(){
 
+        String encodedApiKey="ZmFiNWVlYjc5ZmVmNDRmMzg0NjUzMDU1MjEwNTA2";
+
         //request URI
         RestAssured.baseURI="http://api.weatherapi.com/v1";
 
@@ -19,7 +22,7 @@ public class GetRequest_TC005 {
         RequestSpecification httpRequest=RestAssured.given();
 
         //response object
-        Response response =httpRequest.request(Method.GET,"/forecast.json?key=fab5eeb79fef44f384653055210506&q=Lucknow&days=1&aqi=no&alerts=no");
+        Response response =httpRequest.request(Method.GET,"/forecast.json?key=+"+ ApiUtility.decodeString(encodedApiKey) +"&q=Lucknow&days=1&aqi=no&alerts=no");
 
         //asserting text in response body
         Assert.assertTrue(response.getBody().asString().contains("Partly cloudy"));
