@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 public class GetRequest_TC007 {
 
     @Test
-    public void getRequest_handleAuthorization(){
+    public void getRequest_handleBasicAuthorization(){
 
         //request base URI
         RestAssured.baseURI="https://qa-task.backbasecloud.com";
