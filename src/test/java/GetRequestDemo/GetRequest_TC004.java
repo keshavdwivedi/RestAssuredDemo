@@ -20,11 +20,10 @@ public class GetRequest_TC004 {
         //request URI
         RestAssured.baseURI="http://api.weatherapi.com/v1";
 
-        //request object
-        RequestSpecification httpRequest=RestAssured.given();
-
-        //response object
-        Response response =httpRequest.request(Method.GET,"/timezone.json?key="+ ApiUtility.decodeString(encodedApiKey) +"&q=Lucknow");
+        //getting reponse from get request
+                 Response response=RestAssured.given()
+                .params("key",ApiUtility.decodeString(encodedApiKey))
+                .params("q","Lucknow").get(RestAssured.baseURI+"/timezone.json");
 
         //print response body
         System.out.println(response.getBody().asString());

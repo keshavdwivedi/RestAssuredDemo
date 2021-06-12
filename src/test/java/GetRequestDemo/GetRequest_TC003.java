@@ -18,14 +18,12 @@ public class GetRequest_TC003 {
         //request URI
         RestAssured.baseURI="http://api.weatherapi.com/v1";
 
-        //request object
-        RequestSpecification httpRequest=RestAssured.given();
+        //bdd style request
+        Response response=RestAssured.given().get(RestAssured.baseURI+"/astronomy.json?key="+ ApiUtility.decodeString(encodedApiKey) +"&q=Lucknow&dt=2021-06-05");
 
-        //response object
-        Response response =httpRequest.request(Method.GET,"/astronomy.json?key="+ ApiUtility.decodeString(encodedApiKey) +"&q=Lucknow&dt=2021-06-05");
 
         //print response body
-        System.out.println(response.getBody().asString());
+        response.prettyPrint();
 
         //verify status code
         Assert.assertEquals(response.getStatusCode(),200);

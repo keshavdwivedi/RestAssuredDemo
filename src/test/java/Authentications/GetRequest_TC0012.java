@@ -1,4 +1,4 @@
-package GetRequestDemo;
+package Authentications;
 
 import ApiUtils.ApiUtility;
 import io.restassured.RestAssured;
@@ -8,9 +8,7 @@ import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.Base64;
-
-public class GetRequest_TC0013 {
+public class GetRequest_TC0012 {
 
     @Test
     public void getRequest_handleAuth2(){
@@ -21,11 +19,12 @@ public class GetRequest_TC0013 {
         RestAssured.baseURI="https://api.github.com";
 
         //request object
-        RequestSpecification httpRequest=RestAssured.given().auth().oauth2(ApiUtility.decodeString(token));
+        Response response=RestAssured.given().
+                auth().oauth2(ApiUtility.decodeString(token))
+                .get(RestAssured.baseURI+"/users/keshavdwivedi/repos");
 
-        Response response=httpRequest.request(Method.GET,"/users/keshavdwivedi/repos");
-
-        System.out.println(response.getBody().asString());
+        //print response
+        response.prettyPrint();
 
         Assert.assertEquals(response.getStatusCode(),200);
     }

@@ -2,11 +2,10 @@ package GetRequestDemo;
 
 import ApiUtils.ApiUtility;
 import io.restassured.RestAssured;
-import io.restassured.http.Method;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import static io.restassured.RestAssured.given;
 
 public class GetRequest_TC001 {
 
@@ -17,14 +16,15 @@ public class GetRequest_TC001 {
         //declaring base URI
         RestAssured.baseURI="http://api.weatherapi.com/v1";
 
-        //request object
-        RequestSpecification httpRequest=RestAssured.given();
-
-        //response object
-        Response response =httpRequest.request(Method.GET,"/current.json?key="+ ApiUtility.decodeString(encodedApiKey) +"&q=Lucknow&aqi=yes");
+        //passing parameters to get request
+       Response response= given()
+                .params("key",ApiUtility.decodeString(encodedApiKey))
+                .params("q","Lucknow")
+                .params("aqi","yes")
+                .get(RestAssured.baseURI+"/current.json");
 
         //print response body
-        System.out.println(response.getBody().asString());
+        response.prettyPrint();
 
         //verify status code
         Assert.assertEquals(response.getStatusCode(),200);

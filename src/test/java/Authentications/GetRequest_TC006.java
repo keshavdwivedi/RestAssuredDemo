@@ -1,4 +1,4 @@
-package GetRequestDemo;
+package Authentications;
 
 import io.restassured.RestAssured;
 import io.restassured.authentication.PreemptiveBasicAuthScheme;
@@ -9,7 +9,7 @@ import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class GetRequest_TC007 {
+public class GetRequest_TC006 {
 
     @Test
     public void getRequest_handleBasicAuthorization(){
@@ -17,20 +17,14 @@ public class GetRequest_TC007 {
         //request base URI
         RestAssured.baseURI="https://qa-task.backbasecloud.com";
 
-        //declaring preemptivebasicauthschme object and setting username and password
-        PreemptiveBasicAuthScheme preemptiveAuth=new PreemptiveBasicAuthScheme();
-        preemptiveAuth.setUserName("candidatex");
-        preemptiveAuth.setPassword("qa-is-cool");
-        RestAssured.authentication=preemptiveAuth;
-
-        //request object
-        RequestSpecification httpRequest=RestAssured.given();
-
-        //response object
-        Response response =httpRequest.request(Method.GET,"/");
+        Response response=RestAssured.given()
+                .auth()
+                .preemptive()
+                .basic("candidatex","qa-is-cool").
+                get(RestAssured.baseURI+"/");
 
         //printing response body
-        System.out.println(response.getBody().asString());
+        response.prettyPrint();
 
         //validating status code
         Assert.assertEquals(response.getStatusCode(),200);

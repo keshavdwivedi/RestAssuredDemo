@@ -1,25 +1,27 @@
 package PostRequestDemo;
 
+import DataDrivenSetup.APIDataProvider;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class PostRequest_TC002 {
+public class PostRequest_TC007 {
 
-    @Test()
-    public void postRequest_verifystatuscode_jsonpathValues(){
-
+    @Test(dataProvider = "apidataprovider",dataProviderClass = APIDataProvider.class)
+    public void PostRequest_dataDrivenTest(String name,String job){
         //base URI declared
         RestAssured.baseURI="https://reqres.in";
 
-        Response response=RestAssured.given()
-                .contentType("application/json")
-                .queryParam("name","morpheus")
-                .queryParam("job","leader")
+        //request object
+       Response response= RestAssured.given()
+               .contentType("application/json")
+               .queryParam("name",name)
+                .queryParam("job",job)
                 .post(RestAssured.baseURI+"/api/users");
 
-     response.prettyPrint();
+       //printing response
+        response.prettyPrint();
 
         //assert status code
         Assert.assertEquals(response.getStatusCode(),201);
@@ -27,6 +29,6 @@ public class PostRequest_TC002 {
         //assert date in response
         String createdAtActual=response.jsonPath().get("createdAt");
         Assert.assertTrue(createdAtActual.contains("2021-06-12"));
-
     }
+
 }
