@@ -3,9 +3,11 @@ package getRequestDemo;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import org.testng.Assert;
 import org.testng.annotations.Test;
-import java.util.Map;
+
+import java.util.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class GetRequest_TC005 {
 
@@ -13,26 +15,58 @@ public class GetRequest_TC005 {
     public void getRequest_extractvalue_eachnode_jsonpath(){
 
         //request URI
-        RestAssured.baseURI="https://reqres.in";
+        RestAssured.baseURI="https://api.restful-api.dev";
 
 
-        Response response=RestAssured.given().get(RestAssured.baseURI+"/api/users/2");
+        Response response=RestAssured.given().when().get(RestAssured.baseURI+"/objects");
 
         //print the response
         response.prettyPrint();
 
-        //using jsonpath with response to capture entire response in jsonpath variable
-        JsonPath jsonPath=response.jsonPath();
+       JsonPath jsonPath=response.jsonPath();
+       List<String>listName=jsonPath.getList("name");
+       for (String name:listName){
 
-        //System.out.println(jsonPath.getString("data.id")); accessing nested json by jsonpath
+           System.out.println("Mobile names are:-  "+name);
+           assertThat(listName.contains("Apple AirPods"),is(true));
+           assertThat(listName.contains("Apple iPhone 11, 64GB"),is(true));
+           assertThat(listName.size(),is(13));
+       }
 
-        //parse json with hashmap
-        Map<String,String>data=jsonPath.getMap("data");
-        Assert.assertEquals(data.get("id"),2);
-        Assert.assertEquals(data.get("email"),"janet.weaver@reqres.in");
-        Assert.assertEquals(data.get("first_name"),"Janet");
-        Assert.assertEquals(data.get("last_name"),"Weaver");
 
+         List<String>colorList=jsonPath.getList("data.color");
+            for (String color:colorList){
+                System.out.println("Colors are:-  "+color);
+                assertThat(colorList.contains("Cloudy White"),is(true));
+                assertThat(colorList.size(),is(12));
+            }
+
+        List<String>Price=jsonPath.getList("data.Price");
+        for (String price:Price){
+            System.out.println("Prices are:-  "+price);
+            assertThat(Price.contains("519.99"),is(true));
+            assertThat(Price.size(),is(12));
+        }
     }
-
 }
+
+
+/*1. using map
+
+
+     JsonPath jsonPath=response.jsonPath();
+              Map<String, String> map=jsonPath.getMap("available[0]");
+              Assert.assertEquals(map.get("amount"),0);
+
+     2. using getbody
+
+      JsonPath path=new JsonPath(response.asString());
+      path=response.getBody().jsonPath();
+      String loginToken=path.get("data.token");
+      System.out.println("The login token of logged in user is:-  "+loginToken);
+
+      3. direct from response
+
+      Jsonpath path=response.jsonpath();
+      String firstname=path.get("data.firstname");
+      System.out.println("The login token of logged in user is:-  "+loginToken);*/

@@ -8,6 +8,9 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.List;
+import java.util.Map;
+
 public class GetRequest_TC004 {
 
     @Test
@@ -21,7 +24,7 @@ public class GetRequest_TC004 {
         //getting reponse from get request
                  Response response=RestAssured.given()
                 .params("key",ApiUtility.decodeString(encodedApiKey))
-                .params("q","Lucknow").get(RestAssured.baseURI+"/timezone.json");
+                .params("q","Lucknow").when().get(RestAssured.baseURI+"/timezone.json");
 
         //print response body
         System.out.println(response.getBody().asString());
@@ -37,6 +40,10 @@ public class GetRequest_TC004 {
         {
             System.out.println(header.getName()+"  "+header.getValue());
         }
+
+        //validate number of headers
+        List<Header> headersList=allheaders.asList();
+        Assert.assertEquals(headersList.size(),24);
     }
 
 }

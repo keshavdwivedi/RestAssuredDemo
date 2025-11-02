@@ -15,7 +15,7 @@ public class DeleteRequest_TC015 {
                  given()
                 .auth()
                 .basic(ApiUtility.decodeString(APIKey),"")
-                .baseUri("https://api.stripe.com")
+                .baseUri("https://api.stripe.com").when()
                 .delete("/v1/customers/cus_JenMgwdfZByUks")
                 .prettyPrint();
     }

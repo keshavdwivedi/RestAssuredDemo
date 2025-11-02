@@ -3,9 +3,10 @@ package getRequestDemo;
 import apiUtils.ApiUtility;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.testng.Assert;
+import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GetRequest_TC001 {
 
@@ -20,17 +21,18 @@ public class GetRequest_TC001 {
        Response response= given()
                 .params("key",ApiUtility.decodeString(encodedApiKey))
                 .params("q","Lucknow")
-                .params("aqi","yes")
+                .params("aqi","yes").when()
                 .get(RestAssured.baseURI+"/current.json");
 
         //print response body
         response.prettyPrint();
 
         //verify status code
-        Assert.assertEquals(response.getStatusCode(),200);
+        assertThat(response.getStatusCode(), Matchers.equalTo(200));
 
         //verify status line
-        Assert.assertEquals(response.getStatusLine(),"HTTP/1.1 200 OK");
+        assertThat(response.getStatusLine(),Matchers.comparesEqualTo("HTTP/1.1 200 OK"));
+        //Assert.assertEquals(response.getStatusLine(),"HTTP/1.1 200 OK");
 
 
     }

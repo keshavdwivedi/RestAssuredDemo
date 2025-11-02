@@ -6,7 +6,12 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
 public class GetRequest_TC0012 {
+
+    //oauth2 authentication is used when we have to when 3rd party applications need to access user data without exposing user credentials.
 
     @Test
     public void getRequest_handleAuth2(){
@@ -17,14 +22,15 @@ public class GetRequest_TC0012 {
         RestAssured.baseURI="https://api.github.com";
 
         //request object
-        Response response=RestAssured.given().
-                auth().oauth2(ApiUtility.decodeString(token))
-                .get(RestAssured.baseURI+"/users/keshavdwivedi/repos");
+        Response response= RestAssured.given().
+                auth().preemptive().basic(ApiUtility.decodeString(""), token)
+                .when()
+                .get(RestAssured.baseURI+"/octocat");
 
         //print response
         response.prettyPrint();
 
-        Assert.assertEquals(response.getStatusCode(),200);
+        assertThat(response.getStatusCode(), equalTo(200));
     }
 
 }
